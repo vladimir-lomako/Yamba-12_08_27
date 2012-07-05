@@ -1,6 +1,7 @@
 package com.marakana.yamba;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -120,7 +121,7 @@ public class StatusActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.itemPrefs:
-                Log.d(TAG, "prefs menu selected");
+                startActivity(new Intent(this, PrefsActivity.class));
                 break;
 
             default:

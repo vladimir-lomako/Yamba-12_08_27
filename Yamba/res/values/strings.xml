@@ -11,5 +11,12 @@
     <string name="statusFail">Update failed</string>
     <string name="statusSuccess">Update succeeded</string>
 
-    <string name="titlePrefs">Prefs</string>
+    <string name="prefsTitle">Settings</string>
+    <string name="prefsUserKey">PREFS_USER</string>
+    <string name="prefsUserTitle">User Name</string>
+    <string name="prefsPwdKey">PREFS_PWD</string>
+    <string name="prefsPwdTitle">Password</string>
+    <string name="prefsUrlKey">PREFS_URL</string>
+    <string name="prefsUrlTitle">Site URL</string>
+    <string name="prefsUrlSummary">The URL for the microblogging service</string>
 </resources>
