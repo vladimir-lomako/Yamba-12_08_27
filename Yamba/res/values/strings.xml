@@ -10,5 +10,6 @@
     <string name="submit">Submit</string>
     <string name="statusFail">Update failed</string>
     <string name="statusSuccess">Update succeeded</string>
-    
+
+    <string name="titlePrefs">Prefs</string>
 </resources>
