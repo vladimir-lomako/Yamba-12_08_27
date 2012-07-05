@@ -4,4 +4,9 @@
     <string name="app_name">Yamba</string>
     <string name="hello">Hello World, StatusActivity!</string>
 
+    <string name="status">Status</string>
+    <string name="statusLen">140</string>
+    <string name="statusHint">Please enter your 140 character status</string>
+    <string name="submit">Submit</string>
+    
 </resources>

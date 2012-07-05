@@ -1,6 +1,4 @@
 .project
 .classpath
-.settings
 bin
 gen
-/.settings
