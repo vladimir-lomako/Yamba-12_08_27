@@ -6,8 +6,8 @@
         android:title="@string/prefsUserTitle" />
     <EditTextPreference
         android:key="@string/prefsPwdKey"
-        android:title="@string/prefsPwdTitle" 
-        android:password="true" />
+        android:password="true"
+        android:title="@string/prefsPwdTitle" />
     <EditTextPreference
         android:defaultValue="http://yamba.marakana.com/api"
         android:key="@string/prefsUrlKey"
