@@ -17,7 +17,6 @@
 
         <!-- android:uiOptions="splitActionBarWhenNarrow" -->
 
-        <activity android:name=".PrefsActivity" />
         <activity
             android:name=".StatusActivity"
             android:label="@string/titleStatus" >
@@ -27,6 +26,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".svc.UpdaterService" />
+
+        <activity android:name=".PrefsActivity" />
     </application>
 
 </manifest>
