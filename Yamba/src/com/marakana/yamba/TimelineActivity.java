@@ -5,8 +5,10 @@ package com.marakana.yamba;
 import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 
 import com.marakana.yamba.data.TimelineContract;
 import com.marakana.yamba.data.TimelineDao;
+import com.marakana.yamba.svc.UpdaterService;
 
 
 /**
@@ -32,7 +35,8 @@ import com.marakana.yamba.data.TimelineDao;
 public class TimelineActivity extends ListActivity
 implements LoaderManager.LoaderCallbacks<Cursor>
 {
-    private static final String TAG = "TIMELINE";
+    private static final String TAG = "TimelineActivity";
+
     private static final int LOADER_ID = 37;
 
     private static final String[] FROM = new String[] {
@@ -86,7 +90,18 @@ implements LoaderManager.LoaderCallbacks<Cursor>
         }
     }
 
+   class UpdateReceiver extends BroadcastReceiver {
+       @Override
+       public void onReceive(Context context, Intent intent) {
+           Bundle extra = intent.getExtras();
+           Log.d(TAG, "Broadcast received: " + extra.getInt(UpdaterService.NEW_STATUS_COUNT));
+           refresh();
+       }
+   }
+
     private SimpleCursorAdapter listAdapter;
+    private UpdateReceiver receiver;
+    private IntentFilter filter;
 
     /**
      * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
@@ -163,5 +178,31 @@ implements LoaderManager.LoaderCallbacks<Cursor>
         listAdapter = new SimpleCursorAdapter(this, R.layout.row, null, FROM, TO, 0);
         listAdapter.setViewBinder(new TimelineBinder());
         setListAdapter(listAdapter);
+
+        receiver = new UpdateReceiver();
+        filter = new IntentFilter(UpdaterService.NEW_STATUS_INTENT);
+    }
+
+    /**
+     * @see android.app.Activity#onResume()
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(receiver, filter);
+    }
+
+    /**
+     * @see android.app.Activity#onPause()
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+        refresh();
+    }
+
+    void refresh() {
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 }

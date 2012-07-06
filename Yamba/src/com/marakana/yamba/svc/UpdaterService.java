@@ -20,7 +20,11 @@ import com.marakana.yamba.data.TimelineDao;
  * UpdaterService
  */
 public class UpdaterService extends IntentService {
-    public static final long POLL_INTERVAL = 30 * 1000;
+    public static final long POLL_INTERVAL = 3 * 60 * 1000;
+
+    public static final String NEW_STATUS_INTENT = "com.marakana.yamba.NEW_STATUS";
+    public static final String NEW_STATUS_COUNT = "com.marakana.yamba.extra.NEW_STATUS_COUNT";
+    public static final String NEW_STATUS_PERM = "com.marakana.yamba.permission.NEW_STATUS";
 
     private static final String TAG = "UpdaterService";
 
@@ -59,6 +63,7 @@ public class UpdaterService extends IntentService {
 
         int nUpdates = addAll(statuses);
         Log.e(TAG, "New records added: " + nUpdates);
+        notifyNewStatus(nUpdates);
     }
 
     private int addAll(List<Status> statuses) {
@@ -80,5 +85,12 @@ public class UpdaterService extends IntentService {
         }
 
         return i;
+    }
+
+    private void notifyNewStatus(int count) {
+        Log.d(TAG, "Notify: " + count);
+        Intent broadcast = new Intent(NEW_STATUS_INTENT);
+        broadcast.putExtra(NEW_STATUS_COUNT, count);
+        sendBroadcast(broadcast, NEW_STATUS_PERM);
     }
 }

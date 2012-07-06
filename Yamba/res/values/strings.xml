@@ -22,5 +22,6 @@
     <string name="prefsUrlTitle">Site URL</string>
     <string name="prefsUrlSummary">The URL for the microblogging service</string>
 
-
+    <string name="updatePermLabel">Receive Yamba timeline update notifications</string>
+    
 </resources>
