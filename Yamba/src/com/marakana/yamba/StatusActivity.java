@@ -114,11 +114,22 @@ public class StatusActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.itemPrefs:
-                startActivity(new Intent(this, PrefsActivity.class));
+            case R.id.itemTimeline:
+                startActivity(new Intent(this, TimelineActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                 break;
 
+            case R.id.itemStatus:
+                startActivity(new Intent(this, StatusActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                break;
+
+            case R.id.itemPrefs:
+                startActivity(new Intent(this, PrefsActivity.class));
+                return true;
+
             default:
+                Log.d(TAG, "Unrecognized menu item: " + item);
                 return false;
         }
 

@@ -3,7 +3,9 @@
 
     <string name="app_name">Yamba</string>
 
-    <string name="titleStatus">Status</string>
+    <string name="timelineTitle">Timeline</string>
+    
+    <string name="statusTitle">Status</string>
     <string name="statusLen">140</string>
     <string name="statusHint">Please enter your 140 character status</string>
     <string name="submit">Submit</string>
@@ -19,4 +21,6 @@
     <string name="prefsUrlKey">PREFS_URL</string>
     <string name="prefsUrlTitle">Site URL</string>
     <string name="prefsUrlSummary">The URL for the microblogging service</string>
+
+
 </resources>
