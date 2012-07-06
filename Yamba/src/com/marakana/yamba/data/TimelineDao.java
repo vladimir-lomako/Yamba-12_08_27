@@ -110,6 +110,24 @@ public final class TimelineDao {
             TimelineContract.Columns.DEFAULT_SORT_ORDER);
     }
 
+    /**
+     * @param projection
+     * @param sel
+     * @param args
+     * @param sort
+     * @return a Cursor to the query results
+     */
+    public Cursor query(String[] projection, String sel, String[] args, String sort) {
+        return getDb().query(
+            TimelineContract.TABLE,
+            projection,
+            sel,
+            args,
+            null,
+            null,
+            sort);
+    }
+
     private synchronized SQLiteDatabase getDb() {
         if (null == db) { db = dbHelper.getWritableDatabase(); }
         return db;
