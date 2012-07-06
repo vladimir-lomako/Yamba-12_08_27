@@ -62,8 +62,8 @@ public class UpdaterService extends IntentService {
         }
 
         int nUpdates = addAll(statuses);
-        Log.e(TAG, "New records added: " + nUpdates);
-        notifyNewStatus(nUpdates);
+        Log.d(TAG, "New records added: " + nUpdates);
+        if (0 < nUpdates) { notifyNewStatus(nUpdates); }
     }
 
     private int addAll(List<Status> statuses) {
@@ -79,9 +79,8 @@ public class UpdaterService extends IntentService {
                 values.put(TimelineContract.Columns.CREATED_AT, Long.valueOf(t));
                 values.put(TimelineContract.Columns.TEXT, status.getText());
                 values.put(TimelineContract.Columns.USER, status.getUser().getName());
-                dao.insertOrIgnore(values);
-                i++;
-            }
+                if (dao.insertOrIgnore(values)) { i++; }
+             }
         }
 
         return i;

@@ -67,6 +67,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
             return c;
         }
 
+        // see bug: http://code.google.com/p/android/issues/detail?id=14944
         @Override
         protected void onStartLoading() {
             if (!loaded) { forceLoad(); }
