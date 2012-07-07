@@ -1,8 +1,10 @@
 package com.marakana.yambaclient;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 
 
@@ -14,6 +16,19 @@ public class TimelineActivity extends Activity {
     public static final String TAG_TEXT = "TEXT";
     private static final String FRAG_TAG = "Client.TimelineActivity";
 
+    boolean useFrag;
+
+    /**
+     * @see android.app.Activity#startActivityFromFragment(android.app.Fragment, android.content.Intent, int)
+     */
+    @Override
+    public void startActivityFromFragment(Fragment fragment, Intent intent, int requestCode) {
+        if (!useFrag) { startActivity(intent); }
+        else if (fragment instanceof TimelineFragment) {
+            launchDetailFragment(intent.getExtras());
+        }
+    }
+
     /**
      * @see android.app.Activity#onResume()
      */
@@ -22,25 +37,10 @@ public class TimelineActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.timeline);
 
-        installDetailsFragment();
+        useFrag = null != findViewById(R.id.timelineDetail);
+
+        if (useFrag) { installDetailsFragment(); }
    }
-
-    /**
-     * @param text the text to be put into the fragment
-     */
-    public void launchDetailFragment(String text) {
-        FragmentTransaction xact = getFragmentManager().beginTransaction();
-
-        xact.replace(
-            R.id.timelineDetail,
-            TimelineDetailFragment.newInstance(text),
-            FRAG_TAG);
-
-        xact.addToBackStack(null);
-        xact.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-
-        xact.commit();
-    }
 
     private void installDetailsFragment() {
         FragmentManager fragMgr = getFragmentManager();
@@ -52,6 +52,20 @@ public class TimelineActivity extends Activity {
             R.id.timelineDetail,
             TimelineDetailFragment.newInstance("nothing yet"),
             FRAG_TAG);
+        xact.commit();
+    }
+
+    private void launchDetailFragment(Bundle xtra) {
+        FragmentTransaction xact = getFragmentManager().beginTransaction();
+
+        xact.replace(
+            R.id.timelineDetail,
+            TimelineDetailFragment.newInstance(xtra),
+            FRAG_TAG);
+
+        xact.addToBackStack(null);
+        xact.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
         xact.commit();
     }
 }
