@@ -2,6 +2,7 @@ package com.marakana.yamba;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,10 +31,33 @@ public class StatusActivity extends Activity {
     /** Update over max len */
     public static final int RED_LEVEL = 0;
 
+    // if two different threads share access to the same mutable state
+    // they must do it holding the same lock.
+    static class Poster extends AsyncTask<String, Void, Integer> {
+        private volatile StatusActivity activity;
+
+        public void setActivity(StatusActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        protected Integer doInBackground(String... args) {
+            int status = R.string.statusFail;
+            if (null != activity) { status = activity.post(args[0]); }
+            return Integer.valueOf(status);
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (null != activity) { activity.done(result); }
+        }
+    }
+
     private Twitter twitter;
 
     private TextView textCount;
     private EditText editText;
+    private Poster poster;
     private Toast toast;
 
     /** Called when the activity is first created. */
@@ -75,14 +99,35 @@ public class StatusActivity extends Activity {
         textCount.setTextColor(color);
     }
 
+    /**
+     * @see android.app.Activity#onPause()
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (null != poster) { poster.setActivity(null); }
+    }
+
+    /**
+     * @see android.app.Activity#onResume()
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (null != poster) { poster.setActivity(this); }
+    }
+
     void update() {
+        // only allow one post in flight
+        if (poster != null) { return; }
+
         String msg = editText.getText().toString();
         clearText();
 
-        //!!! This implementation is broken!
-        // Do not use in production!
         if (!TextUtils.isEmpty(msg)) {
-            done(Integer.valueOf(post(msg)));
+            poster = new Poster();
+            poster.setActivity(this);
+            poster.execute(msg);
         }
     }
 
@@ -91,13 +136,11 @@ public class StatusActivity extends Activity {
         updateStatusLen(0);
     }
 
+    // !!! run on a different thread!
     int post(String status) {
         try {
             Log.d(TAG, "posting status: " + status);
             twitter.setStatus(status);
-            // Emulate a slow network
-            try { Thread.sleep(60 * 1000); }
-            catch (InterruptedException e) { }
             return R.string.statusSuccess;
         }
         catch (TwitterException e) {
@@ -111,5 +154,6 @@ public class StatusActivity extends Activity {
         Log.d(TAG, "status posted!");
         toast.setText(result.intValue());
         toast.show();
+        poster = null;
     }
 }
