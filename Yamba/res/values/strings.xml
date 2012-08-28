@@ -8,5 +8,7 @@
     <string name="statusLen">140</string>
     <string name="statusHint">Please enter your 140 character status</string>
     <string name="submit">Submit</string>
+    <string name="statusFail">Update failed</string>
+    <string name="statusSuccess">Update succeeded</string>
     
 </resources>
