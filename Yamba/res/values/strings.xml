@@ -11,6 +11,7 @@
     <string name="statusFail">Update failed</string>
     <string name="statusSuccess">Update succeeded</string>
 
+    <string name="connection_prefs">Connection Preferences</string>
     <string name="prefsTitle">Settings</string>
     <string name="prefsUserKey">PREFS_USER</string>
     <string name="prefsUserTitle">User Name</string>
