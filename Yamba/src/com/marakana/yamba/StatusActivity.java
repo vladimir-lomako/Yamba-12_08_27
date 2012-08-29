@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
 
 
@@ -57,8 +56,6 @@ public class StatusActivity extends Activity {
         }
     }
 
-    private Twitter twitter;
-
     private TextView textCount;
     private EditText editText;
     private Poster poster;
@@ -85,9 +82,6 @@ public class StatusActivity extends Activity {
             new Button.OnClickListener() {
                 @Override public void onClick(View v) { update(); }
             } );
-
-        twitter = new Twitter("student", "password");
-        twitter.setAPIRootUrl("http://yamba.marakana.com/api");
 
         toast = Toast.makeText(this, null, Toast.LENGTH_LONG);
     }
@@ -172,7 +166,7 @@ public class StatusActivity extends Activity {
     int post(String status) {
         try {
             Log.d(TAG, "posting status: " + status);
-            twitter.setStatus(status);
+            ((YambaApplication) getApplication()).getTwitter().setStatus(status);
             return R.string.statusSuccess;
         }
         catch (TwitterException e) {

@@ -3,6 +3,6 @@
 
     <header
         android:fragment="com.marakana.yamba.PrefsFragment"
-        android:title="@string/connection_prefs" />
+        android:title="@string/prefsHeading" />
 
 </preference-headers>
