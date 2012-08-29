@@ -1,10 +1,17 @@
 package com.marakana.yamba;
 
 import winterwell.jtwitter.Twitter;
+
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.marakana.yamba.svc.UpdaterService;
 
 /**
  * YambaApplication
@@ -12,11 +19,17 @@ import android.util.Log;
 public class YambaApplication extends Application
     implements SharedPreferences.OnSharedPreferenceChangeListener
 {
-    private static final String TAG = "YambaApplication";
-    private static final String KEY_USERNAME = "PREFS_USER";
-    private static final String KEY_PASSWORD = "PREFS_PWD";
-    private static final String KEY_API_ROOT = "PREFS_URL";
-    private static final String DEFAULT_API_ROOT = "http://yamba.marakana.com/api";
+    public static final String TAG = "YambaApplication";
+
+    public static final String KEY_USERNAME = "PREFS_USER";
+    public static final String KEY_PASSWORD = "PREFS_PWD";
+    public static final String KEY_API_ROOT = "PREFS_URL";
+    public static final String DEFAULT_API_ROOT = "http://yamba.marakana.com/api";
+
+    public static final String ACTION_NEW_STATUS = "com.marakana.android.yamba.ACTION_NEW_STATUS";
+    public static final String EXTRA_NEW_STATUS_COUNT = "EXTRA_NEW_STATUS_COUNT";
+    public static final String PERM_NEW_STATUS = "com.marakana.android.yamba.permission.NEW_STATUS";
+
 
     private Twitter twitter;
 
@@ -27,6 +40,17 @@ public class YambaApplication extends Application
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "Application up!");
+
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        am.setRepeating(
+            AlarmManager.RTC,
+            System.currentTimeMillis() + 10,
+            15000,
+            PendingIntent.getService(
+                this,
+                1,
+                new Intent(this, UpdaterService.class),
+                PendingIntent.FLAG_UPDATE_CURRENT));
 
         PreferenceManager.getDefaultSharedPreferences(this)
             .registerOnSharedPreferenceChangeListener(this);
