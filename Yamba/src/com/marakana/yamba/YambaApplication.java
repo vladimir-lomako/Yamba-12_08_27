@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.marakana.yamba.data.TimelineDao;
 import com.marakana.yamba.svc.UpdaterService;
 
 /**
@@ -26,12 +27,8 @@ public class YambaApplication extends Application
     public static final String KEY_API_ROOT = "PREFS_URL";
     public static final String DEFAULT_API_ROOT = "http://yamba.marakana.com/api";
 
-    public static final String ACTION_NEW_STATUS = "com.marakana.android.yamba.ACTION_NEW_STATUS";
-    public static final String EXTRA_NEW_STATUS_COUNT = "EXTRA_NEW_STATUS_COUNT";
-    public static final String PERM_NEW_STATUS = "com.marakana.android.yamba.permission.NEW_STATUS";
-
-
     private Twitter twitter;
+    private TimelineDao timelineDao;
 
     /**
      * @see android.app.Application#onCreate()
@@ -41,19 +38,21 @@ public class YambaApplication extends Application
         super.onCreate();
         Log.d(TAG, "Application up!");
 
+        timelineDao = new TimelineDao(this);
+
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .registerOnSharedPreferenceChangeListener(this);
+
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         am.setRepeating(
             AlarmManager.RTC,
-            System.currentTimeMillis() + 10,
-            15000,
+            System.currentTimeMillis() + UpdaterService.POLL_INTERVAL,
+            UpdaterService.POLL_INTERVAL,
             PendingIntent.getService(
                 this,
                 1,
                 new Intent(this, UpdaterService.class),
                 PendingIntent.FLAG_UPDATE_CURRENT));
-
-        PreferenceManager.getDefaultSharedPreferences(this)
-            .registerOnSharedPreferenceChangeListener(this);
     }
 
 
@@ -67,6 +66,11 @@ public class YambaApplication extends Application
     public synchronized void onSharedPreferenceChanged(SharedPreferences key, String val) {
         twitter = null;
     }
+
+    /**
+     * @return the singleton DAO object
+     */
+    public TimelineDao getDao() { return timelineDao; }
 
     /**
      * @return a current, valid, twitter object
