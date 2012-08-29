@@ -74,8 +74,7 @@ public class UpdaterService extends IntentService {
                 values.put(TimelineContract.Columns.CREATED_AT, Long.valueOf(t));
                 values.put(TimelineContract.Columns.TEXT, status.getText());
                 values.put(TimelineContract.Columns.USER, status.getUser().getName());
-                dao.insertOrIgnore(values);
-                i++;
+                if (dao.insertOrIgnore(values)) { i++; }
             }
         }
 

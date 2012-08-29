@@ -3,6 +3,7 @@ package com.marakana.yamba.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
@@ -81,12 +82,10 @@ public final class TimelineDao {
     /**
      * @param values
      */
-    public void insertOrIgnore(ContentValues values) {
-        getDb().insertWithOnConflict(
-            TimelineContract.TABLE,
-            null,
-            values,
-            SQLiteDatabase.CONFLICT_IGNORE);
+    public boolean insertOrIgnore(ContentValues values) {
+        try { return 0 < getDb().insertOrThrow(TimelineContract.TABLE, null, values); }
+        catch (SQLException e) { }
+        return false;
     }
 
     private synchronized SQLiteDatabase getDb() {
