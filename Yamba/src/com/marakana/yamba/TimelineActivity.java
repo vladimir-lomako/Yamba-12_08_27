@@ -174,6 +174,7 @@ public class TimelineActivity extends ListActivity
     protected void onResume() {
         super.onResume();
         registerReceiver(receiver, filter);
+        refresh();
     }
 
     /**
@@ -183,7 +184,6 @@ public class TimelineActivity extends ListActivity
     protected void onPause() {
         super.onPause();
         unregisterReceiver(receiver);
-        refresh();
     }
 
     void refresh() {

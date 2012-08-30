@@ -64,7 +64,7 @@ public class UpdaterService extends IntentService {
 
         int nUpdates = addAll(statuses);
         Log.e(TAG, "New records added: " + nUpdates);
-        notifyNewStatus(nUpdates);
+        if (0 < nUpdates) { notifyNewStatus(nUpdates); }
     }
 
     private int addAll(List<Status> statuses) {
