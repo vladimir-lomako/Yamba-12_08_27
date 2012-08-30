@@ -18,8 +18,8 @@
         <!-- android:uiOptions="splitActionBarWhenNarrow" -->
 
         <activity
-            android:name=".StatusActivity"
-            android:label="@string/titleStatus" >
+            android:name=".TimelineActivity"
+            android:label="@string/timelineTitle" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,9 +27,13 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".svc.UpdaterService" />
-
+        <activity
+            android:name=".StatusActivity"
+            android:label="@string/statusTitle" />
+  
         <activity android:name=".PrefsActivity" />
+        
+        <service android:name=".svc.UpdaterService" />
     </application>
 
 </manifest>

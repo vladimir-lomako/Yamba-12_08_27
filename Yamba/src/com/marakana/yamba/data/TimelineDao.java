@@ -24,6 +24,13 @@ public final class TimelineDao {
         "max(" + TimelineContract.Columns.CREATED_AT + ")"
     };
 
+    private static final String[] TIMELINE_COLS = new String[] {
+        BaseColumns._ID,
+        TimelineContract.Columns.CREATED_AT,
+        TimelineContract.Columns.USER,
+        TimelineContract.Columns.TEXT
+    };
+
     // DbHelper implementations
     private class DbHelper extends SQLiteOpenHelper {
 
@@ -97,6 +104,20 @@ public final class TimelineDao {
                 TimelineContract.TABLE,
                 TimelineContract.Columns.CREATED_AT + " < ?1",
                 new String[] { String.valueOf(l) });
+    }
+
+    /**
+     * @return a cursor to the timeline
+     */
+    public Cursor getTimeline() {
+        return getDb().query(
+            TimelineContract.TABLE,
+            TIMELINE_COLS,
+            null,
+            null,
+            null,
+            null,
+            TimelineContract.Columns.DEFAULT_SORT_ORDER);
     }
 
     private synchronized SQLiteDatabase getDb() {
