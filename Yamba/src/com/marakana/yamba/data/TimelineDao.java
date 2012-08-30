@@ -81,11 +81,22 @@ public final class TimelineDao {
 
     /**
      * @param values
+     * @return true if record added successfully
      */
     public boolean insertOrIgnore(ContentValues values) {
         try { return 0 < getDb().insertOrThrow(TimelineContract.TABLE, null, values); }
         catch (SQLException e) { }
         return false;
+    }
+
+    /**
+     * @param l
+     */
+    public void truncateDb(long l) {
+        getDb().delete(
+                TimelineContract.TABLE,
+                TimelineContract.Columns.CREATED_AT + " < ?1",
+                new String[] { String.valueOf(l) });
     }
 
     private synchronized SQLiteDatabase getDb() {

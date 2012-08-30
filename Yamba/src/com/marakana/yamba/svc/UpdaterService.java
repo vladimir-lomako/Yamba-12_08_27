@@ -21,6 +21,7 @@ import com.marakana.yamba.data.TimelineDao;
  */
 public class UpdaterService extends IntentService {
     public static final long POLL_INTERVAL = 30 * 1000;
+    public static final long MAX_AGE = 1000 * 60 * 60 * 12; //twelve hours
 
     private static final String TAG = "UpdaterService";
 
@@ -64,6 +65,7 @@ public class UpdaterService extends IntentService {
     private int addAll(List<Status> statuses) {
         TimelineDao dao = ((YambaApplication) getApplication()).getDao();
         long mostRecentStatus = dao.getLatestStatusCreatedAtTime();
+        long mostRecentUpdate = mostRecentStatus;
         int i = 0;
         ContentValues values = new ContentValues();
         for (Status status: statuses) {
@@ -74,9 +76,14 @@ public class UpdaterService extends IntentService {
                 values.put(TimelineContract.Columns.CREATED_AT, Long.valueOf(t));
                 values.put(TimelineContract.Columns.TEXT, status.getText());
                 values.put(TimelineContract.Columns.USER, status.getUser().getName());
-                if (dao.insertOrIgnore(values)) { i++; }
+                if (dao.insertOrIgnore(values)) {
+                    i++;
+                    if (t > mostRecentUpdate) { mostRecentUpdate = t; }
+                }
             }
         }
+
+        if (0 < i) { dao.truncateDb(mostRecentUpdate - MAX_AGE); }
 
         return i;
     }
