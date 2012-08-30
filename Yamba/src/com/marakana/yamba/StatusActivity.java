@@ -1,7 +1,6 @@
 package com.marakana.yamba;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -60,12 +58,15 @@ public class StatusActivity extends Activity {
     private EditText editText;
     private Poster poster;
     private Toast toast;
+    private MenuHandler menus;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        menus = new MenuHandler(this);
 
         textCount = (TextView) findViewById(R.id.countText);
 
@@ -102,9 +103,7 @@ public class StatusActivity extends Activity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
+        return menus.onCreateOptionsMenu(menu);
     }
 
     /**
@@ -113,27 +112,13 @@ public class StatusActivity extends Activity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.itemTimeline:
-                startActivity(new Intent(this, TimelineActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-                break;
-
+        int itemId = item.getItemId();
+        switch (itemId) {
             case R.id.itemStatus:
-                startActivity(new Intent(this, StatusActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-                break;
-
-            case R.id.itemPrefs:
-                startActivity(new Intent(this, PrefsActivity.class));
                 return true;
-
             default:
-                Log.d(TAG, "Unrecognized menu item: " + item);
-                return false;
+                return menus.onOptionsItemSelected(itemId);
         }
-
-        return true;
     }
 
     /**

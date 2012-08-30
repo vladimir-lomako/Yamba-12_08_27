@@ -5,23 +5,24 @@ package com.marakana.yamba;
 import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SimpleCursorAdapter;
-import android.widget.SimpleCursorAdapter.ViewBinder;
 import android.widget.TextView;
 
 import com.marakana.yamba.data.TimelineContract;
 import com.marakana.yamba.data.TimelineDao;
+import com.marakana.yamba.svc.UpdaterService;
 
 
 /**
@@ -30,9 +31,9 @@ import com.marakana.yamba.data.TimelineDao;
  * @author <a href="mailto:blake.meike@gmail.com">G. Blake Meike</a>
  */
 public class TimelineActivity extends ListActivity
-implements LoaderManager.LoaderCallbacks<Cursor>
+    implements LoaderManager.LoaderCallbacks<Cursor>
 {
-    private static final String TAG = "TIMELINE";
+    private static final String TAG = "TimelineActivity";
     private static final int LOADER_ID = 37;
 
     private static final String[] FROM = new String[] {
@@ -69,7 +70,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
         }
     }
 
-    static class TimelineBinder implements ViewBinder {
+    static class TimelineBinder implements SimpleCursorAdapter.ViewBinder {
 
         @Override
         public boolean setViewValue(View view, Cursor cursor, int colIndex) {
@@ -86,16 +87,26 @@ implements LoaderManager.LoaderCallbacks<Cursor>
         }
     }
 
+   class UpdateReceiver extends BroadcastReceiver {
+       @Override
+       public void onReceive(Context context, Intent intent) {
+           Bundle extra = intent.getExtras();
+           Log.d(TAG, "Broadcast received: " + extra.getInt(UpdaterService.NEW_STATUS_COUNT));
+           refresh();
+       }
+   }
+
     private SimpleCursorAdapter listAdapter;
+    private UpdateReceiver receiver;
+    private IntentFilter filter;
+    private MenuHandler menus;
 
     /**
      * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
+        return menus.onCreateOptionsMenu(menu);
     }
 
     /**
@@ -104,27 +115,13 @@ implements LoaderManager.LoaderCallbacks<Cursor>
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        int itemId = item.getItemId();
+        switch (itemId) {
             case R.id.itemTimeline:
-                startActivity(new Intent(this, TimelineActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-                break;
-
-            case R.id.itemStatus:
-                startActivity(new Intent(this, StatusActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-                break;
-
-            case R.id.itemPrefs:
-                startActivity(new Intent(this, PrefsActivity.class));
                 return true;
-
             default:
-                Log.d(TAG, "Unrecognized menu item: " + item);
-                return false;
+                return menus.onOptionsItemSelected(itemId);
         }
-
-        return true;
     }
 
     /**
@@ -158,10 +155,38 @@ implements LoaderManager.LoaderCallbacks<Cursor>
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        menus = new MenuHandler(this);
+
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
         listAdapter = new SimpleCursorAdapter(this, R.layout.row, null, FROM, TO, 0);
         listAdapter.setViewBinder(new TimelineBinder());
         setListAdapter(listAdapter);
+
+        receiver = new UpdateReceiver();
+        filter = new IntentFilter(UpdaterService.NEW_STATUS_INTENT);
+    }
+
+    /**
+     * @see android.app.Activity#onResume()
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(receiver, filter);
+    }
+
+    /**
+     * @see android.app.Activity#onPause()
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+        refresh();
+    }
+
+    void refresh() {
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 }
