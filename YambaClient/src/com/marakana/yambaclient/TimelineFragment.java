@@ -29,6 +29,8 @@ import com.marakana.yamba.data.TimelineContract;
 public class TimelineFragment extends ListFragment
     implements LoaderManager.LoaderCallbacks<Cursor>
 {
+    private static final String TAG = TimelineFragment.class.getName();
+
     /** Status update intent */
     public static final String NEW_STATUS_INTENT = "com.marakana.yamba.NEW_STATUS";
 
@@ -52,7 +54,7 @@ public class TimelineFragment extends ListFragment
         @Override
         public void onReceive(Context context, Intent intent) {
             refresh();
-            Log.d("TAG", "Notification Received");
+            Log.d(TAG, "Notification Received");
         }
     }
 
