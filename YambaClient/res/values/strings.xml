@@ -3,5 +3,6 @@
 
     <string name="app_name">Yamba Client</string>
     <string name="titleTimeline">Timeline</string>
+    <string name="titleTimelineDetail">Timeline Detail</string>
     
 </resources>

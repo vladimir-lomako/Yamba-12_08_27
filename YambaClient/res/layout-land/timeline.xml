@@ -13,7 +13,7 @@
         android:layout_weight="0.66" />
 
     <FrameLayout
-        android:id="@+id/timeline_detail"
+        android:id="@+id/timelineDetail"
         android:layout_height="match_parent"
         android:layout_width="0dp"
         android:layout_weight="0.33"

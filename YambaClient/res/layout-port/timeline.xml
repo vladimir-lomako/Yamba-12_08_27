@@ -11,12 +11,5 @@
         android:layout_height="0dp"
         android:layout_width="match_parent"
         android:layout_weight="0.66" />
-
-    <FrameLayout
-        android:id="@+id/timeline_detail"
-        android:layout_height="0dp"
-        android:layout_width="match_parent"
-        android:layout_weight="0.33"
-        android:paddingTop="10dp" />
     
 </LinearLayout>

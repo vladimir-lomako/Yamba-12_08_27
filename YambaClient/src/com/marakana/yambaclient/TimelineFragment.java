@@ -121,9 +121,13 @@ public class TimelineFragment extends ListFragment
     @Override
     public void onListItemClick(ListView l, View v, int pos, long id) {
         Cursor cursor = (Cursor) getListAdapter().getItem(pos);
-        ((TimelineActivity) getActivity()).launchDetailFragment(
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), TimelineDetailActivity.class);
+        intent.putExtra(
+            TimelineActivity.TAG_TEXT,
             cursor.getString(cursor.getColumnIndex(TimelineContract.Columns.TEXT)));
-     }
+        startActivity(intent);
+    }
 
     /**
      * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int, android.os.Bundle)
