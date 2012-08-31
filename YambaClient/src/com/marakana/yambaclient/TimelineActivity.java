@@ -32,7 +32,7 @@ public class TimelineActivity extends Activity {
         FragmentTransaction xact = getFragmentManager().beginTransaction();
 
         xact.replace(
-            R.id.timelineDetail,
+            R.id.timeline_detail,
             TimelineDetailFragment.newInstance(text),
             FRAG_TAG);
 
@@ -49,7 +49,7 @@ public class TimelineActivity extends Activity {
 
         FragmentTransaction xact = fragMgr.beginTransaction();
         xact.add(
-            R.id.timelineDetail,
+            R.id.timeline_detail,
             TimelineDetailFragment.newInstance("nothing yet"),
             FRAG_TAG);
         xact.commit();
