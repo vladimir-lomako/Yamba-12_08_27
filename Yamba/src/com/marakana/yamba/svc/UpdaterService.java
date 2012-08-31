@@ -63,7 +63,7 @@ public class UpdaterService extends IntentService {
         }
 
         int nUpdates = addAll(statuses);
-        Log.e(TAG, "New records added: " + nUpdates);
+        Log.d(TAG, "New records added: " + nUpdates);
         if (0 < nUpdates) { notifyNewStatus(nUpdates); }
     }
 
@@ -87,7 +87,6 @@ public class UpdaterService extends IntentService {
                 }
             }
         }
-
         if (0 < i) { dao.truncateDb(mostRecentUpdate - MAX_AGE); }
 
         return i;

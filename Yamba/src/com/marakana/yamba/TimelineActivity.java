@@ -64,6 +64,7 @@ public class TimelineActivity extends ListActivity
             return c;
         }
 
+        // see bug: http://code.google.com/p/android/issues/detail?id=14944
         @Override
         protected void onStartLoading() {
             if (!loaded) { forceLoad(); }
