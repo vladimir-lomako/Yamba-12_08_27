@@ -46,7 +46,7 @@ public class YambaApplication extends Application
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         am.setRepeating(
             AlarmManager.RTC,
-            System.currentTimeMillis() + UpdaterService.POLL_INTERVAL,
+            System.currentTimeMillis() + 100,
             UpdaterService.POLL_INTERVAL,
             PendingIntent.getService(
                 this,
