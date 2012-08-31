@@ -49,8 +49,5 @@ public final class TimelineContract {
         public static final String TEXT = "txt";
         /** */
         public static final String USER = "user";
-
-        /** The default sort order for this table, reverse chronological order */
-        public static final String DEFAULT_SORT_ORDER = CREATED_AT + " COLLATE LOCALIZED DESC";
     }
 }

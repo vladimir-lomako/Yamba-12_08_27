@@ -2,5 +2,7 @@
 <resources>
 
     <color name="fog">#cfff</color>
-
+    <color name="red">#cccc2222</color>
+    <color name="blue">#cc6666dd</color>
+    
 </resources>
