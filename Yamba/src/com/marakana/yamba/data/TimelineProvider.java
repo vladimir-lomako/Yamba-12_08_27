@@ -3,7 +3,6 @@ package com.marakana.yamba.data;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
@@ -53,8 +52,7 @@ public class TimelineProvider extends ContentProvider {
      */
     @Override
     public boolean onCreate() {
-        Context context = getContext();
-        dao = new TimelineDao(context);
+        dao = new TimelineDao(getContext());
         return dao != null;
     }
 
@@ -63,7 +61,8 @@ public class TimelineProvider extends ContentProvider {
      */
     @Override
     public Cursor query(
-        Uri uri, String[] projection,
+        Uri uri,
+        String[] projection,
         String selection,
         String[] selectionArgs,
         String sort)
@@ -83,7 +82,7 @@ public class TimelineProvider extends ContentProvider {
             projection,
             selection,
             selectionArgs,
-            (!TextUtils.isEmpty(sort)) ? sort : TimelineContract.Columns.DEFAULT_SORT_ORDER);
+            (!TextUtils.isEmpty(sort)) ? sort : TimelineDao.DEFAULT_SORT_ORDER);
 
         // Notify the context's ContentResolver if the cursor result set changes
         c.setNotificationUri(getContext().getContentResolver(), uri);

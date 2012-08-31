@@ -20,6 +20,10 @@ public final class TimelineDao {
     static final int VERSION = 1;
     static final String DATABASE = "timeline.db";
 
+    /** The default sort order for this table, reverse chronological order */
+    public static final String DEFAULT_SORT_ORDER
+        = TimelineContract.Columns.CREATED_AT + " COLLATE LOCALIZED DESC";
+
     private static final String[] MAX_CREATED_AT_COLS= {
         "max(" + TimelineContract.Columns.CREATED_AT + ")"
     };
@@ -117,7 +121,7 @@ public final class TimelineDao {
             null,
             null,
             null,
-            TimelineContract.Columns.DEFAULT_SORT_ORDER);
+            DEFAULT_SORT_ORDER);
     }
 
     /**
