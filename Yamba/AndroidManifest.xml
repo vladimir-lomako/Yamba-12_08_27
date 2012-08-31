@@ -9,14 +9,16 @@
         android:targetSdkVersion="14" />
 
     <permission
+        android:name="com.marakana.yamba.timeline.READ_TIMELINE"
+        android:protectionLevel="normal" />
+    <permission
         android:name="com.marakana.yamba.permission.NEW_STATUS"
         android:label="@string/updatePermLabel"
-        android:protectionLevel="signature" >
-    </permission>
+        android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.marakana.yamba.permission.NEW_STATUS" />
-    
+
     <application
         android:name=".YambaApplication"
         android:icon="@drawable/icon"
@@ -39,6 +41,11 @@
         <activity android:name=".PrefsActivity" />
 
         <service android:name=".svc.UpdaterService" />
+
+        <provider
+            android:name=".data.TimelineProvider"
+            android:authorities="com.marakana.yamba.timeline"
+            android:readPermission="com.marakana.yamba.timeline.READ_TIMELINE" />
     </application>
 
 </manifest>
