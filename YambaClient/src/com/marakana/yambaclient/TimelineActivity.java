@@ -1,9 +1,9 @@
 package com.marakana.yambaclient;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,7 +11,7 @@ import android.os.Bundle;
 /**
  * TimelineActivity
  */
-public class TimelineActivity extends Activity {
+public class TimelineActivity extends FragmentActivity {
     /** Bundle tag for Id */
     public static final String TAG_TEXT = "TEXT";
     private static final String FRAG_TAG = "Client.TimelineActivity";
@@ -43,7 +43,7 @@ public class TimelineActivity extends Activity {
    }
 
     private void installDetailsFragment() {
-        FragmentManager fragMgr = getFragmentManager();
+        FragmentManager fragMgr = getSupportFragmentManager();
 
         if (null != fragMgr.findFragmentByTag(FRAG_TAG)) { return; }
 
@@ -56,7 +56,7 @@ public class TimelineActivity extends Activity {
     }
 
     private void launchDetailFragment(Bundle xtra) {
-        FragmentTransaction xact = getFragmentManager().beginTransaction();
+        FragmentTransaction xact = getSupportFragmentManager().beginTransaction();
 
         xact.replace(
             R.id.timelineDetail,

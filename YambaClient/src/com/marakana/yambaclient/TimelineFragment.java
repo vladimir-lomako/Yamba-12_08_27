@@ -6,12 +6,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.app.ListFragment;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.widget.SimpleCursorAdapter;
-import android.widget.SimpleCursorAdapter.ViewBinder;
+import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,7 +57,7 @@ public class TimelineFragment extends ListFragment
         }
     }
 
-    static class TimelineBinder implements ViewBinder {
+    static class TimelineBinder implements SimpleCursorAdapter.ViewBinder {
         @Override
         public boolean setViewValue(View view, Cursor cursor, int colIndex) {
             if (view.getId() != R.id.textTime) { return false; }
